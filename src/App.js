@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import './App.css';
 
 import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '100';
@@ -151,15 +152,27 @@ class App extends Component {
     return (
       <div className="page">
         <div className="interactions">
-          <Search
-            value={searchTerm}
-            onChange={this.onSearchChange}
-            onSubmit={this.onSearchSubmit}
-          >
-            Search
-          </Search>
+          <div className="container">
+            <div className="row">
+              <div className="col-8" style={{ textAlign: 'left' }}>
+                <h4 style={{display: 'inline-block'}}>HN Clean</h4>
+                <h6 style={{marginLeft: '1em', display: 'inline-block'}}>Source</h6>
+                <h6 style={{marginLeft: '1em', display: 'inline-block'}}>About</h6>
+              </div>
+              <div className="col-4" style={{ verticalAlign: 'bottom' }}>
+                <Search
+                  value={searchTerm}
+                  onChange={this.onSearchChange}
+                  onSubmit={this.onSearchSubmit}
+                >
+                  Search
+                </Search>
+              </div>
+            </div>
+          </div>
+
         </div>
-        { error
+        {error
           ? <div className="interactions">
             <p>Something went wrong.</p>
           </div>
@@ -302,6 +315,18 @@ class Table extends Component {
   }
 }
 
+const Nav = () => {
+  return (
+    <div className="container">
+      <div className="row justify-content-md-center">
+        <div className="col" style={{ textAlign: 'left' }}><h4>HN Clean</h4></div>
+        <div className="col-md-auto" style={{ verticalAlign: 'botto' }}>Help</div>
+        <div className="col col-lg-2" style={{ verticalAlign: 'bottom' }}>Source</div>
+      </div>
+    </div>
+  )
+}
+
 const Sort = ({
   sortKey,
   activeSortKey,
@@ -342,7 +367,7 @@ const Loading = () =>
 const withLoading = (Component) => ({ isLoading, ...rest }) =>
   isLoading
     ? <Loading />
-    : <Component { ...rest } />
+    : <Component {...rest} />
 
 const ButtonWithLoading = withLoading(Button);
 

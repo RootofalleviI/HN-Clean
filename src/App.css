@@ -1,5 +1,6 @@
 .page {
   margin: 20px;
+  font-size: 0.85rem;
 }
 
 .interactions {
@@ -12,8 +13,8 @@
 
 .table-header {
   display: flex;
-  line-height: 24px;
-  font-size: 16px;
+  line-height: 16px;
+  font-size: 14px;
   padding: 0 10px;
   justify-content: space-between;
 }
@@ -21,12 +22,12 @@
 .table-empty {
   margin: 200px;
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .table-row {
   display: flex;
-  line-height: 24px;
+  line-height: 10px;
   white-space: nowrap;
   margin: 10px 0;
   padding: 10px;

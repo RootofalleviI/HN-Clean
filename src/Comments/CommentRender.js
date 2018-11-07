@@ -5,7 +5,7 @@ class CommentRender extends Component {
     constructor(props) {
         super(props);
         this.rawHTML = props.rawHTML;
-        this.indent = props.depth * 2;
+        this.indent = props.depth;
         this.margin = '1';
         this.author = props.author;
         this.date = props.date;
@@ -15,8 +15,17 @@ class CommentRender extends Component {
 
         this.state = {
             hidden: false,
+            hover: false,
             collapsed: false,
         }
+    }
+
+    hoverOn = () => {
+        this.setState({ hover: true });
+    }
+
+    hoverOff = () => {
+        this.setState({ hover: false });
     }
 
     collapseClickHandler = () => {
@@ -24,25 +33,40 @@ class CommentRender extends Component {
     }
 
     expandClickHandler = () => {
-        this.setState({ hidden: false, collapsed: false });
+        this.setState({ collapsed: false });
+    }
+
+    hideClickHandler = () => {
+        this.setState({ hidden: true });
+    }
+
+    showClickHandler = () => {
+        this.setState({ hidden: false });
     }
 
     render = () => {
 
         let header = <div style={{ color: `gray` }}>
-            {!(this.state.hidden || this.state.collapsed)
-                ? <span onClick={this.collapseClickHandler}>-Hide </span>
-                : <span onClick={this.expandClickHandler}>+Show </span>}
-            | Author: {this.author} | Date: {this.date} | SA Score: {this.SAScore}
-        </div>
+            {!this.state.collapsed
+                ? <span onClick={this.collapseClickHandler}>[<u>Collapse</u>] </span>
+                : <span onClick={this.expandClickHandler}>[<u>Expand</u>] </span>
+            }
+            {!this.state.hidden
+                ? <span onClick={this.hideClickHandler}> [<u>Hide</u>]</span>
+                : <span onClick={this.showClickHandler}> [<u>Show</u>]</span>}
+            | Author: {this.author} | Date: {this.date} | SA Score: {this.SAScore} 
+        </div >
+
+        let commentText = !this.state.hidden ? this.rawHTML : '<em>Hidden</em>';
 
         return (
             <div style={{ paddingLeft: `${this.indent}em` }}>
                 {this.author ? header : null}
-                {!(this.state.hidden || this.state.collapsed) ?
+                {!this.state.collapsed
+                    ?
                     <div>
                         <div >
-                            <span dangerouslySetInnerHTML={{ __html: this.rawHTML + '</p>' }} />
+                            <span dangerouslySetInnerHTML={{ __html: commentText + '</p>' }} />
                         </div>
                         <div>
                             {this.children.map(childComment =>

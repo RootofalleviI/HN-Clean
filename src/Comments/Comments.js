@@ -4,6 +4,8 @@ import axios from 'axios';
 import CommentADT from './CommentADT';
 import CommentRender from './CommentRender';
 
+import './Comments.css';
+
 class Comments extends Component {
 
     _isMounted = false;
@@ -43,7 +45,7 @@ class Comments extends Component {
         this.story_title = commentList[0].story_title;
         this.story_url = commentList[0].story_url;
         this.num_comments = commentList.length;
-        let root = new CommentADT(this.story_id, this.story_id, -1, '', -1, '');
+        let root = new CommentADT(this.story_id, this.story_id, -1, '', 0, '');
         this.searchForChildren(root, commentList);
         this.setState({ parsedCommentTree: root });
         root.prettyPrint(0);
@@ -60,7 +62,7 @@ class Comments extends Component {
                     comment.comment_text,
                     parent.depth + 1,
                     comment.author,
-                    comment.created_at.substring(0,10));
+                    comment.created_at.substring(0, 10));
                 parent.addChild(temp);
             }
         }
@@ -72,25 +74,31 @@ class Comments extends Component {
     }
 
     render = () => {
-        return (
-            <div>
+
+        let story_header =
+            <div style={{ margin: '10px' }}>
                 <h3><a href={this.story_url}>{this.story_title}</a></h3>
                 <div>Points: {this.story_points} | Author: {this.story_author} | Comments: {this.num_comments}</div>
                 <hr />
-                {this.state.parsedCommentTree
-                    ?
-                    // this.renderHelper(this.state.parsedCommentTree)
-                    
-                    <CommentRender
-                        rawHTML={this.state.parsedCommentTree.comment_text}
-                        depth={this.state.parsedCommentTree.depth}
-                        author={this.state.parsedCommentTree.author}  
-                        date={this.state.parsedCommentTree.date} 
-                        children={this.state.parsedCommentTree.getChild()} />
-                    :
-                    <h3>Loading</h3>
-                }
             </div>
+
+        return (
+            <center>
+                <div className="Page">
+                    {story_header}
+                    {this.state.parsedCommentTree
+                        ?
+                        <CommentRender
+                            rawHTML={this.state.parsedCommentTree.comment_text}
+                            depth={this.state.parsedCommentTree.depth}
+                            author={this.state.parsedCommentTree.author}
+                            date={this.state.parsedCommentTree.date}
+                            children={this.state.parsedCommentTree.getChild()} />
+                        :
+                        <h6>Fetching Comments...</h6>
+                    }
+                </div>
+            </center>
         );
     }
 }
