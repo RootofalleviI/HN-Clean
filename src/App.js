@@ -4,6 +4,8 @@ import { sortBy } from 'lodash';
 import classNames from 'classnames';
 import './App.css';
 
+import { Link } from 'react-router-dom';
+
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '100';
 
@@ -280,7 +282,7 @@ class Table extends Component {
               {item.author}
             </span>
             <span style={{ width: '10%' }}>
-              {item.num_comments}
+              <Link to={`/comments/${item.objectID}`}>{item.num_comments}</Link>
             </span>
             <span style={{ width: '10%' }}>
               {item.points}

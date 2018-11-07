@@ -2,9 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Comments from './Comments/Comments';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+ReactDOM.render(
+  <Router>
+    <Switch>
+      <Route path="/comments/:story_id" component={Comments} />
+      <Route path="/" component={App} />
+    </Switch>
+  </Router>
+  , document.getElementById('root'));
 
 if (module.hot) {
   module.hot.accept();
