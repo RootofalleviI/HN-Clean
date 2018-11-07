@@ -3,5 +3,7 @@
     margin-top: 1%;
     align-self: center;
     text-align: start;
-    background-color: rgb(246, 246, 239);
+    background: #ffffff;
+
+    font-size: 13px;
 }

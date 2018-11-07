@@ -1,6 +1,9 @@
 .page {
+  width: 85%;
+  text-align: start;
   margin: 20px;
   font-size: 0.85rem;
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 
 .interactions {
@@ -8,14 +11,15 @@
 }
 
 .table {
-  margin: 20px 0;
+  margin: 0;
 }
 
 .table-header {
   display: flex;
-  line-height: 16px;
+  line-height: 20px;
+  font-weight: bold;
   font-size: 14px;
-  padding: 0 10px;
+  padding: 0;
   justify-content: space-between;
 }
 
@@ -27,24 +31,24 @@
 
 .table-row {
   display: flex;
-  line-height: 10px;
+  line-height: 15px;
   white-space: nowrap;
-  margin: 10px 0;
-  padding: 10px;
+  margin: 5px 0;
+  padding: 3px 0;
   background: #ffffff;
-  border: 1px solid #e3e3e3;
+  /* border: 1px solid #e3e3e3; */
 }
 
 .table-header > span {
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 5px;
+  padding: 0 2px;
 }
 
 .table-row > span {
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 5px;
+  padding: 0 2px;
 }
 
 .button-inline {
@@ -56,9 +60,11 @@
   padding: 0;
   font-size: inherit;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .button-active {
   border-radius: 0;
+  font-style: italic;
   border-bottom: 1px solid #38BB6C;
 }

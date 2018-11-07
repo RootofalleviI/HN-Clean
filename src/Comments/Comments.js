@@ -77,23 +77,26 @@ class Comments extends Component {
 
         let story_header =
             <div style={{ margin: '10px' }}>
-                <h3><a href={this.story_url}>{this.story_title}</a></h3>
-                <div>Points: {this.story_points} | Author: {this.story_author} | Comments: {this.num_comments}</div>
+                <h5><a href={this.story_url} target="_blank">{this.story_title}</a></h5>
+                Points: {this.story_points} | Author: {this.story_author} | Comments: {this.num_comments} |
+                <a href="/"> Go Back</a>
                 <hr />
             </div>
 
         return (
             <center>
                 <div className="Page">
-                    {story_header}
                     {this.state.parsedCommentTree
                         ?
-                        <CommentRender
-                            rawHTML={this.state.parsedCommentTree.comment_text}
-                            depth={this.state.parsedCommentTree.depth}
-                            author={this.state.parsedCommentTree.author}
-                            date={this.state.parsedCommentTree.date}
-                            children={this.state.parsedCommentTree.getChild()} />
+                        <div>
+                            {story_header}
+                            <CommentRender
+                                rawHTML={this.state.parsedCommentTree.comment_text}
+                                depth={this.state.parsedCommentTree.depth}
+                                author={this.state.parsedCommentTree.author}
+                                date={this.state.parsedCommentTree.date}
+                                children={this.state.parsedCommentTree.getChild()} />
+                        </div>
                         :
                         <h6>Fetching Comments...</h6>
                     }

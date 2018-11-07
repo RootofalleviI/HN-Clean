@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const DEFAULT_QUERY = 'redux';
-const DEFAULT_HPP = '100';
+const DEFAULT_HPP = '20';
 
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
@@ -150,45 +150,47 @@ class App extends Component {
     ) || [];
 
     return (
-      <div className="page">
-        <div className="interactions">
-          <div className="container">
-            <div className="row">
-              <div className="col-8" style={{ textAlign: 'left' }}>
-                <h4 style={{display: 'inline-block'}}>HN Clean</h4>
-                <h6 style={{marginLeft: '1em', display: 'inline-block'}}>Source</h6>
-                <h6 style={{marginLeft: '1em', display: 'inline-block'}}>About</h6>
-              </div>
-              <div className="col-4" style={{ verticalAlign: 'bottom' }}>
-                <Search
-                  value={searchTerm}
-                  onChange={this.onSearchChange}
-                  onSubmit={this.onSearchSubmit}
-                >
-                  Search
+      <center>
+        <div className="page">
+          <div className="interactions">
+            <div className="container">
+              <div className="row">
+                <div className="col-8" style={{ textAlign: 'left' }}>
+                  <h4 style={{ display: 'inline-block' }}>HN Clean</h4>
+                  <span style={{ marginLeft: '1em', display: 'inline-block', fontWeight: '500' }}>> Source</span>
+                  <span style={{ marginLeft: '1em', display: 'inline-block', fontWeight: '500' }}>> About</span>
+                </div>
+                <div className="col-4" style={{ verticalAlign: 'bottom' }}>
+                  <Search
+                    value={searchTerm}
+                    onChange={this.onSearchChange}
+                    onSubmit={this.onSearchSubmit}
+                  >
+                    Search
                 </Search>
+                </div>
               </div>
             </div>
+          <hr />
           </div>
-
-        </div>
-        {error
-          ? <div className="interactions">
-            <p>Something went wrong.</p>
-          </div>
-          : <Table
-            list={list}
-            onDismiss={this.onDismiss}
-          />
-        }
-        <div className="interactions">
-          <ButtonWithLoading
-            isLoading={isLoading}
-            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-            More
+          {error
+            ? <div className="interactions">
+              <p>Something went wrong.</p>
+            </div>
+            : <Table
+              list={list}
+              onDismiss={this.onDismiss}
+            />
+          }
+          <div className="interactions">
+            <ButtonWithLoading
+              isLoading={isLoading}
+              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+              More
           </ButtonWithLoading>
+          </div>
         </div>
-      </div>
+      </center>
     );
   }
 }
@@ -246,7 +248,7 @@ class Table extends Component {
     return (
       <div className="table">
         <div className="table-header">
-          <span style={{ width: '40%' }}>
+          <span style={{ width: '55%' }}>
             <Sort
               sortKey={'TITLE'}
               onSort={this.onSort}
@@ -255,7 +257,7 @@ class Table extends Component {
               Title
             </Sort>
           </span>
-          <span style={{ width: '30%' }}>
+          <span style={{ width: '15%' }}>
             <Sort
               sortKey={'AUTHOR'}
               onSort={this.onSort}
@@ -288,10 +290,10 @@ class Table extends Component {
         </div>
         {reverseSortedList.map(item =>
           <div key={item.objectID} className="table-row">
-            <span style={{ width: '40%' }}>
+            <span style={{ width: '55%' }}>
               <a href={item.url}>{item.title}</a>
             </span>
-            <span style={{ width: '30%' }}>
+            <span style={{ width: '15%' }}>
               {item.author}
             </span>
             <span style={{ width: '10%' }}>
