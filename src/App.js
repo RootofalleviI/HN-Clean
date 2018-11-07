@@ -282,7 +282,7 @@ class Table extends Component {
               {item.author}
             </span>
             <span style={{ width: '10%' }}>
-              <Link to={`/comments/${item.objectID}`}>{item.num_comments}</Link>
+              <Link to={`/comments/${item.objectID}-${item.author}-${item.points}`}>{item.num_comments}</Link>
             </span>
             <span style={{ width: '10%' }}>
               {item.points}

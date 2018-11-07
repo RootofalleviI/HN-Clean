@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route path="/comments/:story_id" component={Comments} />
+      <Route path="/comments/:story_id-:story_author-:story_points" component={Comments} />
       <Route path="/" component={App} />
     </Switch>
   </Router>

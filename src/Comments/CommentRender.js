@@ -1,33 +1,65 @@
 import React, { Component } from 'react';
 
-class CommentRender extends Component { 
+class CommentRender extends Component {
 
     constructor(props) {
         super(props);
         this.rawHTML = props.rawHTML;
         this.indent = props.depth * 2;
         this.margin = '1';
-        
-        if (this.indent == 0) {
-            this.color = 'blue';
-            this.margin = '3';
-        } else if (this.indent == 1) {
-            this.color = 'green';
-        } else if (this.indent == 2) {
-            this.color = 'red';
-        } else if (this.indent == 3) {
-            this.color = 'purple';
-        } else if (this.indent == 4) {
-            this.color = 'pink';
-        } else {
-            this.color = 'yellow';
+        this.author = props.author;
+        this.date = props.date;
+        this.SAScore = 0;
+
+        this.children = props.children;
+
+        this.state = {
+            hidden: false,
+            collapsed: false,
         }
     }
 
+    collapseClickHandler = () => {
+        this.setState({ collapsed: true });
+    }
+
+    expandClickHandler = () => {
+        this.setState({ hidden: false, collapsed: false });
+    }
+
     render = () => {
+
+        let header = <div style={{ color: `gray` }}>
+            {!(this.state.hidden || this.state.collapsed)
+                ? <span onClick={this.collapseClickHandler}>-Hide </span>
+                : <span onClick={this.expandClickHandler}>+Show </span>}
+            | Author: {this.author} | Date: {this.date} | SA Score: {this.SAScore}
+        </div>
+
         return (
-            <div style={{ border: `3px solid ${this.color}`, marginTop: `${this.margin}em`, paddingLeft: `${this.indent}em`}}>
-                <span style={{ borderLeft: `20px solid black`}} dangerouslySetInnerHTML={{ __html: this.rawHTML}} />
+            <div style={{ paddingLeft: `${this.indent}em` }}>
+                {this.author ? header : null}
+                {!(this.state.hidden || this.state.collapsed) ?
+                    <div>
+                        <div >
+                            <span dangerouslySetInnerHTML={{ __html: this.rawHTML + '</p>' }} />
+                        </div>
+                        <div>
+                            {this.children.map(childComment =>
+                                <div key={childComment.comment_id}>
+                                    <CommentRender
+                                        rawHTML={childComment.comment_text}
+                                        depth={childComment.depth}
+                                        author={childComment.author}
+                                        date={childComment.date}
+                                        children={childComment.getChild()}
+                                    />
+                                </div>)
+                            }
+                        </div>
+                    </div>
+                    :
+                    <br />}
             </div>
         )
     }
