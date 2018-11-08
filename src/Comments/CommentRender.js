@@ -60,7 +60,7 @@ class CommentRender extends Component {
         let commentText = !this.state.hidden ? this.rawHTML : '<em>Hidden</em>';
 
         return (
-            <div style={{ paddingLeft: `${this.indent}em` }}>
+            <div style={{ paddingLeft: `${this.indent}rem` }}>
                 {this.author ? header : null}
                 {!this.state.collapsed
                     ?
