@@ -1,112 +1,90 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import CommentADT from './CommentADT';
 import CommentRender from './CommentRender';
 
 import './Comments.css';
 
 class Comments extends Component {
 
-    _isMounted = false;
+  _isMounted = false;
 
-    constructor(props) {
-        super(props);
-        this.story_id = props.match.params.story_id;
-        this.story_author = props.match.params.story_author;
-        this.story_points = props.match.params.story_points;
+  constructor(props) {
+    super(props);
+    this.story_id = props.match.params.story_id;
+    this.story_author = props.match.params.story_author;
+    this.story_points = props.match.params.story_points;
 
-        this.state = {
-            parsedCommentTree: null,
-            error: null,
-        }
-
-        this.fetchComments(this.story_id);
+    this.state = {
+      receivedData: false,
+      error: null,
+      getSA: false,
     }
 
-    componentDidMount = () => {
-        this._isMounted = true;
-    }
+    this.fetchComments(this.story_id);
+  }
 
-    componentWillUnmount = () => {
-        this._isMounted = false;
-    }
+  componentDidMount = () => {
+    this._isMounted = true;
+  }
 
-    fetchComments = (story_id) => {
-        axios(`/api/comments/${story_id}`)
-            .then(result => {
-                console.log(result.data.hits);
-                this.parseComments(result.data.hits);
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  }
 
-            })
-            .catch(error => this._isMounted && this.setState({ error }));
-    }
+  fetchComments = (story_id) => {
+    axios(`/api/comments/${story_id}/1`)
+      // .then(result => this.parseComments(result.data.hits))
+      .then(result => {
+        CommentRender.commentList = result.data.hits;
+        this.story_url = CommentRender.commentList[0].story_url;
+        this.story_title = CommentRender.commentList[0].story_title;
+        this.num_comments = CommentRender.commentList.length;
+        console.log("Received data");
+        console.log(CommentRender.commentList);
+        this.setState({ receivedData: true })
+      })
+      .catch(error => this._isMounted && this.setState({ error }));
+  }
 
-    parseComments = (commentList) => {
-        this.story_title = commentList[0].story_title;
-        this.story_url = commentList[0].story_url;
-        this.num_comments = commentList.length;
-        let root = new CommentADT(this.story_id, this.story_id, -1, '', 0, '', 0);
-        this.searchForChildren(root, commentList);
-        this.setState({ parsedCommentTree: root });
-        root.prettyPrint(0);
-    }
+  render = () => {
 
-    searchForChildren = (parent, commentList) => {
-        for (let i in commentList) {
-            if (commentList[i].parent_id == parent.comment_id) { // Not triple equal
-                let comment = commentList[i];
-                let temp = new CommentADT(
-                    this.story_id,
-                    comment.objectID, // JSON
-                    comment.parent_id,
-                    comment.comment_text,
-                    parent.depth + 1,
-                    comment.author,
-                    comment.created_at.substring(0, 10),
-                    comment.SAScore);
-                parent.addChild(temp);
-            }
-        }
-
-        let commentsToSearchFor = parent.getChild();
-        for (let i in commentsToSearchFor) {
-            this.searchForChildren(commentsToSearchFor[i], commentList);
-        }
-    }
-
-    render = () => {
-
-        let story_header =
-            <div style={{ margin: '10px' }}>
-                <h5><a href={this.story_url} target="_blank">{this.story_title}</a></h5>
-                Points: {this.story_points} | Author: {this.story_author} | Comments: {this.num_comments} |
-                <a href="/"> Go Back</a>
-                <hr />
-            </div>
-
-        return (
-            <center>
-                <div className="Page">
-                    {this.state.parsedCommentTree
-                        ?
-                        <div>
-                            {story_header}
-                            <CommentRender
-                                rawHTML={this.state.parsedCommentTree.comment_text}
-                                depth={this.state.parsedCommentTree.depth}
-                                author={this.state.parsedCommentTree.author}
-                                date={this.state.parsedCommentTree.date}
-                                children={this.state.parsedCommentTree.getChild()}
-                                SAScore='0' />
-                        </div>
-                        :
-                        <h6>Fetching Comments...</h6>
-                    }
+    return (
+      <center>
+        <div className="page">
+          {
+            this.state.receivedData
+              ?
+              <div>
+                <div style={{ margin: '10px' }}>
+                  <h5>
+                    <a
+                      href={this.story_url}
+                      target="_blank">
+                      {this.story_title}
+                    </a>
+                  </h5>
+                  Points: {this.story_points} | Author: {this.story_author} | Comments: {this.num_comments} |
+              <a href="/"> Go Back</a>
+                  <hr />
                 </div>
-            </center>
-        );
-    }
+                <CommentRender
+                  key={this.story_id}
+                  comment_id={this.story_id}
+                  rawHTML='rawHTML'
+                  indent='-1'
+                  author='author'
+                  date='date'
+                  SAScore='SAScore'
+                />
+              </div>
+              :
+              <h6>Fetching Comments...</h6>
+          }
+        </div>
+      </center>
+    );
+  }
 }
 
 export default Comments;

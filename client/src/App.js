@@ -45,31 +45,24 @@ class App extends Component {
     this.state = {
       results: null,
       searchKey: '',
-      searchTerm: "Machine Learning",
+      searchTerm: "",
       error: null,
       isLoading: false,
       sortKey: 'NONE',
       isSortReverse: false,
     };
-
-    this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
-    this.setSearchTopStories = this.setSearchTopStories.bind(this);
-    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
-    this.onSearchChange = this.onSearchChange.bind(this);
-    this.onSearchSubmit = this.onSearchSubmit.bind(this);
-    this.onDismiss = this.onDismiss.bind(this);
   }
 
-  needsToSearchTopStories(searchTerm) {
+  needsToSearchTopStories = searchTerm => {
     return !this.state.results[searchTerm];
   }
 
-  setSearchTopStories(result) {
+  setSearchTopStories = result => {
     const { hits, page } = result;
     this.setState(updateSearchTopStoriesState(hits, page));
   }
 
-  fetchSearchTopStories(searchTerm, page = 0) {
+  fetchSearchTopStories = (searchTerm, page = 0) => {
     this.setState({ isLoading: true });
 
     axios.post(`/api/search`, {
@@ -80,7 +73,7 @@ class App extends Component {
       .catch(error => this._isMounted && this.setState({ error }));
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this._isMounted = true;
 
     const { searchTerm } = this.state;
@@ -88,15 +81,15 @@ class App extends Component {
     this.fetchSearchTopStories(searchTerm);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     this._isMounted = false;
   }
 
-  onSearchChange(event) {
+  onSearchChange = event => {
     this.setState({ searchTerm: event.target.value });
   }
 
-  onSearchSubmit(event) {
+  onSearchSubmit = event => {
     const { searchTerm } = this.state;
     this.setState({ searchKey: searchTerm });
 
@@ -107,7 +100,7 @@ class App extends Component {
     event.preventDefault();
   }
 
-  onDismiss(id) {
+  onDismiss = id => {
     const { searchKey, results } = this.state;
     const { hits, page } = results[searchKey];
 
@@ -309,18 +302,6 @@ class Table extends Component {
       </div>
     );
   }
-}
-
-const Nav = () => {
-  return (
-    <div className="container">
-      <div className="row justify-content-md-center">
-        <div className="col" style={{ textAlign: 'left' }}><h4>HN Clean</h4></div>
-        <div className="col-md-auto" style={{ verticalAlign: 'botto' }}>Help</div>
-        <div className="col col-lg-2" style={{ verticalAlign: 'bottom' }}>Source</div>
-      </div>
-    </div>
-  )
 }
 
 const Sort = ({
