@@ -7,15 +7,6 @@ import './App.css';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const DEFAULT_QUERY = 'redux';
-const DEFAULT_HPP = '20';
-
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const PARAM_HPP = 'hitsPerPage=';
-
 const SORTS = {
   NONE: list => list,
   TITLE: list => sortBy(list, 'title'),
@@ -54,7 +45,7 @@ class App extends Component {
     this.state = {
       results: null,
       searchKey: '',
-      searchTerm: DEFAULT_QUERY,
+      searchTerm: "Machine Learning",
       error: null,
       isLoading: false,
       sortKey: 'NONE',
@@ -81,9 +72,10 @@ class App extends Component {
   fetchSearchTopStories(searchTerm, page = 0) {
     this.setState({ isLoading: true });
 
-    axios.post(`/story`,
-      { searchTerm: searchTerm })
-      // axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+    axios.post(`/api/search`, {
+      searchTerm: searchTerm,
+      page: page
+    })
       .then(result => this.setSearchTopStories(result.data))
       .catch(error => this._isMounted && this.setState({ error }));
   }
