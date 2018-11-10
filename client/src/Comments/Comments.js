@@ -32,11 +32,12 @@ class Comments extends Component {
         this._isMounted = false;
     }
 
-    fetchComments = (story_id, HPP = 5000) => {
-        axios(`http://hn.algolia.com/api/v1/search?tags=comment,story_${story_id}&hitsPerPage=${HPP}`)
+    fetchComments = (story_id) => {
+        axios(`/api/comments/${story_id}`)
             .then(result => {
                 console.log(result.data.hits);
-                this.parseComments(result.data.hits)
+                this.parseComments(result.data.hits);
+
             })
             .catch(error => this._isMounted && this.setState({ error }));
     }
@@ -45,7 +46,7 @@ class Comments extends Component {
         this.story_title = commentList[0].story_title;
         this.story_url = commentList[0].story_url;
         this.num_comments = commentList.length;
-        let root = new CommentADT(this.story_id, this.story_id, -1, '', 0, '');
+        let root = new CommentADT(this.story_id, this.story_id, -1, '', 0, '', 0);
         this.searchForChildren(root, commentList);
         this.setState({ parsedCommentTree: root });
         root.prettyPrint(0);
@@ -62,7 +63,8 @@ class Comments extends Component {
                     comment.comment_text,
                     parent.depth + 1,
                     comment.author,
-                    comment.created_at.substring(0, 10));
+                    comment.created_at.substring(0, 10),
+                    comment.SAScore);
                 parent.addChild(temp);
             }
         }
@@ -95,7 +97,8 @@ class Comments extends Component {
                                 depth={this.state.parsedCommentTree.depth}
                                 author={this.state.parsedCommentTree.author}
                                 date={this.state.parsedCommentTree.date}
-                                children={this.state.parsedCommentTree.getChild()} />
+                                children={this.state.parsedCommentTree.getChild()}
+                                SAScore='0' />
                         </div>
                         :
                         <h6>Fetching Comments...</h6>

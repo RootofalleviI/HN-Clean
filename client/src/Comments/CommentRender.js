@@ -9,7 +9,7 @@ class CommentRender extends Component {
         this.margin = '1';
         this.author = props.author;
         this.date = props.date;
-        this.SAScore = 0;
+        this.SAScore = props.SAScore;
 
         this.children = props.children;
 
@@ -77,6 +77,7 @@ class CommentRender extends Component {
                                         author={childComment.author}
                                         date={childComment.date}
                                         children={childComment.getChild()}
+                                        SAScore={childComment.SAScore}
                                     />
                                 </div>)
                             }

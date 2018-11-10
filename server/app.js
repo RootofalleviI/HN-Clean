@@ -7,6 +7,7 @@ var logger = require('morgan');
 var apiRouter = require('./routes/api');
 var analysisRouter = require('./routes/analysis');
 var searchRouter = require('./routes/search');
+var commentsRouter = require('./routes/comments')
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/analysis', analysisRouter);
+app.use('/api/comments', commentsRouter);
 app.use('/api/search', searchRouter);
 app.use('/api', apiRouter);
 

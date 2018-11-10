@@ -8,6 +8,7 @@ class CommentADT {
         depth,          // distance from this comment to root, 0 being direct comment
         author,
         date,
+        SAScore,
     ) {
         this.story_id = story_id;
         this.comment_id = comment_id;
@@ -16,6 +17,7 @@ class CommentADT {
         this.depth = depth;
         this.author = author;
         this.date = date;
+        this.SAScore = SAScore;
 
         this.childrenList = [];
     }
