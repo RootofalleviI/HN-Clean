@@ -27,10 +27,4 @@ router.get('/', (req, res) => {
   res.render('analysis', { title: 'Analysis' });
 })
 
-router.get('/result', (req, res) => {
-  const comment = req.body.comment;
-  const score = req.body.score;
-  res.render('result', { comment: comment, score: score });
-})
-
 module.exports = router;
