@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import CommentRender from './CommentRender ';
 
 class CommentRender extends Component {
 
@@ -11,11 +10,12 @@ class CommentRender extends Component {
     this.author = props.author;
     this.date = props.date;
     this.SAScore = props.SAScore;
+    this.enableSA = props.enableSA;
+    this.threshold = props.threshold;
 
     this.state = {
-      hidden: false,
-      collapsed: false,
-      showSA: true
+      hidden: !this.SAScore > Number(this.threshold),
+      collapsed: false
     }
   }
 
@@ -25,23 +25,26 @@ class CommentRender extends Component {
   showClickHandler = () => this.setState({ hidden: false });
 
   render = () => {
-
     let header = <div style={{ color: `gray` }}>
       {!this.state.collapsed
         ? <span onClick={this.collapseClickHandler}>[<u>Collapse</u>] </span>
         : <span onClick={this.expandClickHandler}>[<u>Expand</u>] </span>
       }
       {!this.state.hidden
-        ? <span onClick={this.hideClickHandler}> [<u>Hide</u>]</span>
-        : <span onClick={this.showClickHandler}> [<u>Show</u>]</span>}
-      | Author: {this.author} | Date: {this.date} | SA Score: {this.state.showSA ? this.SAScore.toString().substring(0, 7) : '--'}
+        ? <span onClick={this.hideClickHandler}> [<u>Hide</u>] </span>
+        : <span onClick={this.showClickHandler}> [<u>Show</u>] </span>}
+      
+      | Author: {this.author}
+      | Date: {this.date}
+      | SA Score: {this.enableSA == 'true' ? this.SAScore.toString().substring(0, 7) : '--'}
     </div >
 
-    let commentText = !this.state.hidden ? this.rawHTML : '<em>Hidden</em>';
+    let commentText = (this.enableSA == 'false' || this.SAScore > Number(this.threshold))
+      ? this.rawHTML : '<em>Hidden</em>';
 
     return (
       <div className="page">
-        <div style={{ paddingLeft: `${this.indent}rem` }}>
+        <div style={{ paddingLeft: `${this.indent}em` }}>
           {this.indent !== '-1'
             ?
             <div>
@@ -60,18 +63,19 @@ class CommentRender extends Component {
               }
               <div>
                 {CommentRender.commentList.filter(comment => {
-                  // console.log(comment.parent_id, this.comment_id)
                   return comment.parent_id == this.comment_id;
                 }).map(comment => {
-                  console.log(comment)
+                  // console.log(comment)
                   return <CommentRender
                     key={comment.objectID}
                     comment_id={comment.objectID}
                     rawHTML={comment.comment_text}
                     indent={this.indent + 1}
                     author={comment.author}
-                    date={comment.date}
+                    date={comment.created_at.substring(0, 10)}
                     SAScore={comment.SAScore}
+                    threshold={this.threshold}
+                    enableSA={this.enableSA}
                   />
                 })}
               </div>

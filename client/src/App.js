@@ -50,6 +50,8 @@ class App extends Component {
       isLoading: false,
       sortKey: 'NONE',
       isSortReverse: false,
+      threshold: -0.75,
+      enableSA: false
     };
   }
 
@@ -89,6 +91,16 @@ class App extends Component {
     this.setState({ searchTerm: event.target.value });
   }
 
+  onThresholdChange = event => {
+    this.setState({ threshold: event.target.value });
+  }
+
+  onButtonClick = () => {
+    this.setState(prevState => ({
+      enableSA: !prevState.enableSA
+    }));
+  }
+
   onSearchSubmit = event => {
     const { searchTerm } = this.state;
     this.setState({ searchKey: searchTerm });
@@ -121,7 +133,9 @@ class App extends Component {
       results,
       searchKey,
       error,
-      isLoading
+      isLoading,
+      threshold,
+      enableSA
     } = this.state;
 
     const page = (
@@ -142,12 +156,25 @@ class App extends Component {
           <div className="interactions">
             <div className="container">
               <div className="row">
-                <div className="col-8" style={{ textAlign: 'left' }}>
+                <div className="col" style={{ textAlign: 'left' }}>
                   <h4 style={{ display: 'inline-block' }}>HN Clean</h4>
-                  <span style={{ marginLeft: '1em', display: 'inline-block', fontWeight: '500' }}>> Source</span>
-                  <span style={{ marginLeft: '1em', display: 'inline-block', fontWeight: '500' }}>> About</span>
+                  <span style={{ marginLeft: '1em', display: 'inline-block', fontWeight: '500' }}>>
+                    <a href="https://github.com/RootofalleviI/HN-Clean" style={{ color: 'black' }} target='_blank'> Source</a>
+                  </span>
+                  <span style={{ marginLeft: '1em', display: 'inline-block', fontWeight: '500' }}>>
+                    <a href="https://david-duan.me" style={{ color: 'black' }} target='_blank'> About</a>
+                  </span>
+
                 </div>
-                <div className="col-4" style={{ verticalAlign: 'bottom' }}>
+                <div className="col" style={{ verticalAlign: 'bottom' }}>
+                  <Threshold
+                    button_onClick={this.onButtonClick}
+                    button_children={enableSA ? "Disable SA" : "Enable SA"}
+                    threshold_value={threshold}
+                    threshold_onChange={this.onThresholdChange}
+                  />
+                </div>
+                <div className="col" style={{ verticalAlign: 'bottom' }}>
                   <Search
                     value={searchTerm}
                     onChange={this.onSearchChange}
@@ -167,6 +194,8 @@ class App extends Component {
             : <Table
               list={list}
               onDismiss={this.onDismiss}
+              threshold={this.state.threshold}
+              enableSA={this.state.enableSA}
             />
           }
           <div className="interactions">
@@ -193,11 +222,41 @@ const Search = ({
       type="text"
       value={value}
       onChange={onChange}
-    />
+    />&nbsp;
     <button type="submit">
       {children}
     </button>
   </form>
+
+const Threshold = ({
+  button_onClick,
+  button_children,
+  threshold_value,
+  threshold_onChange
+}) => {
+  let inputBox = (button_children === "Disable SA")
+    ? <span>
+      Set SA Threshold: &nbsp;
+    <input
+        size='1'
+        type="text"
+        value={threshold_value}
+        onChange={threshold_onChange}
+      />
+    </span>
+    : null
+  return (
+    <span style={{ verticalAlign: 'middle' }}>
+      <Button
+        onClick={button_onClick}
+        className="threshold-button"
+        children={button_children}
+        style={{ color: 'black' }}
+      /> &nbsp;
+      {inputBox}
+    </span>
+  );
+}
 
 class Table extends Component {
   constructor(props) {
@@ -284,7 +343,12 @@ class Table extends Component {
               {item.author}
             </span>
             <span style={{ width: '10%' }}>
-              <Link to={`/comments/${item.objectID}-${item.author}-${item.points}`}>{item.num_comments}</Link>
+              <Link
+                to={`/comments/${item.objectID}&&${item.author}&&${item.points}&&${this.props.enableSA}&&${this.props.threshold}`}
+                target='_blank'
+              >
+                {item.num_comments}
+              </Link>
             </span>
             <span style={{ width: '10%' }}>
               {item.points}

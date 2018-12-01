@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route path="/comments/:story_id-:story_author-:story_points" component={Comments} />
+      <Route path="/comments/:story_id&amp;&amp;:story_author&amp;&amp;:story_points&amp;&amp;:enableSA&amp;&amp;:threshold" component={Comments} />
       <Route path="/" component={App} />
     </Switch>
   </Router>
