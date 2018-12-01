@@ -14,15 +14,16 @@ class CommentRender extends Component {
     this.threshold = props.threshold;
 
     this.state = {
-      hidden: !this.SAScore > Number(this.threshold),
+      init: true,
+      hidden: false,
       collapsed: false
     }
   }
 
   collapseClickHandler = () => this.setState({ collapsed: true });
   expandClickHandler = () => this.setState({ collapsed: false });
-  hideClickHandler = () => this.setState({ hidden: true });
-  showClickHandler = () => this.setState({ hidden: false });
+  hideClickHandler = () => this.setState({ hidden: true, init: false });
+  showClickHandler = () => this.setState({ hidden: false, init: false });
 
   render = () => {
     let header = <div style={{ color: `gray` }}>
@@ -30,17 +31,23 @@ class CommentRender extends Component {
         ? <span onClick={this.collapseClickHandler}>[<u>Collapse</u>] </span>
         : <span onClick={this.expandClickHandler}>[<u>Expand</u>] </span>
       }
-      {!this.state.hidden
-        ? <span onClick={this.hideClickHandler}> [<u>Hide</u>] </span>
-        : <span onClick={this.showClickHandler}> [<u>Show</u>] </span>}
-      
+      {(this.state.init && this.SAScore < Number(this.threshold)) || (this.state.hidden && !this.state.init)
+        ? <span onClick={this.showClickHandler}> [<u>Show</u>] </span>
+        : <span onClick={this.hideClickHandler}> [<u>Hide</u>] </span>
+      }
       | Author: {this.author}
       | Date: {this.date}
       | SA Score: {this.enableSA == 'true' ? this.SAScore.toString().substring(0, 7) : '--'}
     </div >
 
-    let commentText = (this.enableSA == 'false' || this.SAScore > Number(this.threshold))
-      ? this.rawHTML : '<em>Hidden</em>';
+    let commentText = '';
+    if (this.enableSA == 'true' && this.SAScore <= Number(this.threshold) && this.state.init) {
+      commentText = '<em>Hidden</em';
+    } else if (this.state.hidden) {
+      commentText = '<em>Hidden</em';
+    } else {
+      commentText = this.rawHTML;
+    }
 
     return (
       <div className="page">
