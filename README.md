@@ -2,14 +2,16 @@
 
 > A customized Hackernews client that collapse negative comments based on user-defined threshhold.
 
-#### Technology
+### Overview
 - Frontend: React
 - Backend: Express/Node
 - Sentiment analysis: GCP NL client library
 
-#### Demo
+---
 
-###### Main page
+### Demo
+
+##### Main page
 
 ![main-no-SA](assets/main-no-SA.png)
 
@@ -35,7 +37,7 @@ The search bar uses the [Hacker News algolia search API](https://hn.algolia.com/
 
 
 
-#### Comment Page
+### Comment Page
 
 ![comment-no-sa](assets/comment-no-sa.png)
 
@@ -46,6 +48,12 @@ Leaving SA disabled, the app is basically Hacker News without comments or user p
 ![comment-with-sa](assets/comment-with-sa.png)
 
 If SA is enabled, each comment is analyzed by Google Natural Language client library (see other section for more info); comments with a score below your threshold will be collapsed automatically. The `Collapse` button represents the `[-]` on HN or reddit where the comment (and all of its descendents) are collapsed; the `Show/Hide` button are used for SA purpose. 
+
+---
+
+### Sentiment Analysis
+
+
 
 ---
 > Gonna finish the rest of README soon.
