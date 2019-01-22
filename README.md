@@ -53,7 +53,8 @@ If SA is enabled, each comment is analyzed by Google Natural Language client lib
 
 ### Sentiment Analysis
 
-
+- For authentication: https://cloud.google.com/docs/authentication/#getting_credentials_for_server-centric_flow
+- For using sentimental analysis: https://cloud.google.com/natural-language/docs/sentiment-tutorial
 
 ---
-> Gonna finish the rest of README soon.
+
